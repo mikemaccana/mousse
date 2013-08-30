@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Pamplemousse.JS</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" type="image/png" href="images/favicon.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <a href="#menu" class="nav-link">
+    <img src="./images/navicon-png2x.png" width="20" alt="Menu toggle">
+  </a>
+
+  <nav>
+    <ul>
+      <li class="object"><a href="#element">Introducing Pampelmousse</a>
+        <ul>
+          <li class="method"><a href="#node">Server</a></li>
+          <li class="method"><a href="#browser">Browser</a></li>
+          <li class="method"><a href="#license">License</a></li>
+          <li class="method"><a href="#author">Author</a></li>
+          <li class="method"><a href="#thanks">Thanks</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="content">
+
+    <h1><img src="./images/pamplemousse.png" alt="pamplemousse.js"/></h1>
+
+    <h2>Delicious SSE for the browser and Node/ExpressJS</h2>
+
+    <p>Pamplemousse is a simple set of two modules to handle HTML5 server sent events. It's supplied as a RequireJS module, and takes care of:</p>
+
+    <ul>
+      <li>Encoding things in SSE format</li>
+      <li>Mime types</li>
+      <li>Updating message IDs</li>
+      <li>Timeouts</li>
+      <li>JSON in, JSON out</li>
+    </ul>
+
+    <p>And other boring things. It's really quite small, but having a library should still save you some time.</p>
+
+    <p>Pamplemousse supports all browsers that support SSE: <a href="http://caniuse.com/eventsource">current versions of Chrome, Firefox and Safari, as well as IE11</a>. Server side modules are for Express 3.x on node.js</a>.</p>
+
+    <div id="downloads">
+      <a href="https://github.com/mikemaccana/pamplemousse/archive/master.zip" download="pamplemousse.zip">
+        <button class="download">Download</button>
+      </a>
+    </div>
+
+    <h3>Example code</h3>
+
+    <h4><a name="node"></a>In Node/Express.JS</h4>
+
+    <p>With 'app' as your Express 3 app, with a 3 second timeout, and setting up '/updates' as your SSE URL handler:</p>
+
+<pre><code>var mousseServer = require('mousseServer.js');
+mousseServer.addUpdateHandler(3 * 1000, app, '/updates');
+mousseServer.sendUpdate(someUpdateObject);
+</code></pre>
+
+    <h4><a name="browser"></a>In the browser</h4>
+
+    <p>Assuming '/updates' (configured above) is the source for our SSE messages:</p>
+
+<pre><code>var mousseClient = require('mousseClient');
+mousseClient.setupUpdateListener('/updates', function(message){
+  // Do things with the recieved message
+});
+</code></pre>
+
+    <h3><a name="license"></a>License</h3>
+
+    <p><a href="https://github.com/mikemaccana/pamplemousse/blob/master/LICENSE.md">MIT license</a>.</p>
+
+    <h3><a name="author"></a>Author</h3>
+
+    <p>Mike MacCana (mike.maccana@gmail.com)</p>
+
+    <h3><a name="thanks"></a>Thanks</h3>
+
+    <p>Thanks to Eric Bidelman, whose <a href="http://www.html5rocks.com/en/tutorials/eventsource/basics/">awesome tutorial</a> formed the basis of my introduction to Server Sent events.</p>
+
+  </div>
+  <script data-main="js/index" src="js/require.js"></script>
+</body>
