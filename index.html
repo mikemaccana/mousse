@@ -73,6 +73,9 @@ mousseServer.sendUpdate(someUpdateObject);
 <pre><code>var mousseClient = require('mousseClient');
 mousseClient.setupUpdateListener('/updates', function(message){
   // Do things with the recieved message
+}, function(oldBrowserWarning){
+  // Handle old browsers
+  window.alert(oldBrowserWarning)
 });
 </code></pre>
 
