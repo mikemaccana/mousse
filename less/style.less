@@ -3,6 +3,7 @@
 @pamplemousse: #ff5f7a;
 @sidebar-width: 150px;
 @darkgrey: #222;
+@skin: #F3DB2D;
 
 * {
   box-sizing: border-box;
@@ -47,9 +48,8 @@ nav {
   left: @sidebar-width;
   bottom: 0;
   z-index: 1;
-  background: @darkgrey;
+  background: @skin;
   overflow-y: auto;
-  color: whitesmoke;
   &.menu-active {
     .transform(translateX(0));
     width: @sidebar-width;
@@ -65,13 +65,14 @@ nav {
     padding-left: 10px;
   }
   a, a:hover, a:active, a:visited {
-    color: whitesmoke;
+    color: @pamplemousse;
     text-decoration: none;
     width: 100%;
     display: block;
   }
   a:hover {
     background-color: @pamplemousse;
+    color: whiteSmoke;
   }
   li.object {
     text-transform: uppercase;
@@ -138,6 +139,7 @@ h3 {
 }
 
 h4 {
+  color: @pamplemousse;
   font-size: 10pt;
   text-transform: uppercase;
   font-weight: 900;

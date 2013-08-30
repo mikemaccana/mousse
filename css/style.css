@@ -396,9 +396,8 @@ nav {
   left: 150px;
   bottom: 0;
   z-index: 1;
-  background: #222222;
+  background: #f3db2d;
   overflow-y: auto;
-  color: whitesmoke;
 }
 nav.menu-active {
   -webkit-transform: translateX(0);
@@ -425,13 +424,14 @@ nav a,
 nav a:hover,
 nav a:active,
 nav a:visited {
-  color: whitesmoke;
+  color: #ff5f7a;
   text-decoration: none;
   width: 100%;
   display: block;
 }
 nav a:hover {
   background-color: #ff5f7a;
+  color: whiteSmoke;
 }
 nav li.object {
   text-transform: uppercase;
@@ -498,6 +498,7 @@ h3 {
   font-size: 16pt;
 }
 h4 {
+  color: #ff5f7a;
   font-size: 10pt;
   text-transform: uppercase;
   font-weight: 900;
