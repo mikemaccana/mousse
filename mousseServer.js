@@ -1,4 +1,4 @@
-// Shared code (browser and server)
+// Server code
 define(function(require) {
 
   // Server: How long to tell browsers to wait if the server doesn't respond to our request for messages. In ms.

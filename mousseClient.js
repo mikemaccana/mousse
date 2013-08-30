@@ -1,4 +1,4 @@
-// Shared code (browser and server)
+// Server-only code
 define(function(require) {
 
   // Client: Maximum SSE update failures
@@ -8,7 +8,7 @@ define(function(require) {
   var updateFailureCount = 0;
 
   // Listen for server sent events
-  var setupUpdateListener = function(updateURLPath, receiveMessage){
+  var setupUpdateListener = function(updateURLPath, receiveMessage, handleOldBrowsers){
     // Recieve messages and do stuff with them
     if ( window.EventSource) {
       var source = new EventSource(updateURLPath);
@@ -30,7 +30,7 @@ define(function(require) {
         }
       }, false);
     } else {
-      window.alert('This browser does not support HTML5 server sent events. Please use Chrome or Firefox instead.')
+      handleOldBrowsers('This browser does not support HTML5 server sent events. Please use Chrome, Firefox, Safari or IE11 instead.')
     }
   }
 
