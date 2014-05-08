@@ -57,7 +57,7 @@ define(function(require) {
 
   return {
     addUpdateHandler: addUpdateHandler,
-    respondWithStream: addUpdateHandler,
+    respondWithStream: respondWithStream,
     sendUpdate: sendUpdate
   }
 
