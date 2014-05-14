@@ -1,3 +1,5 @@
+// Pamplemousse BROWSER side
+// Load me as an AMD module
 define(function(){
   // Client: Maximum SSE update failures
   var MAX_UPDATE_FAILURES = 2;
@@ -6,7 +8,7 @@ define(function(){
   var updateFailureCount = 0;
 
   // Listen for server sent events
-  var listen = function(url, receiveMessage, maxFailures, handleOldBrowsers){
+  var listen = function(url, receiveMessage, handleMaxFailures, handleOldBrowsers){
     // Recieve messages and do stuff with them
     if ( window.EventSource) {
       var source = new EventSource(url);
@@ -26,7 +28,7 @@ define(function(){
           updateFailureCount += 1;
           if ( updateFailureCount >= MAX_UPDATE_FAILURES ) {
             source.close();
-            maxFailures(updateFailureCount);
+            handleMaxFailures(updateFailureCount);
           }
         }
       }, false);

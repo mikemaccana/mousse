@@ -1,6 +1,6 @@
 {
   "name": "pamplemousse",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Mike MacCana <mike.maccana@gmail.com>",
   "description": "Delicious SSE for Node/ExpressJS and the browser",
   "scripts": {
@@ -16,9 +16,7 @@
     "sse",
     "server sent events"
   ],
-  "dependencies": {
-    "express": "^4.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "license": "MIT",
   "engines": {
