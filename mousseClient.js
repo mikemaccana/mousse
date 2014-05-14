@@ -1,6 +1,4 @@
-// Server-only code
-define(function(require) {
-
+define(function(){
   // Client: Maximum SSE update failures
   var MAX_UPDATE_FAILURES = 2;
 
@@ -8,34 +6,42 @@ define(function(require) {
   var updateFailureCount = 0;
 
   // Listen for server sent events
-  var setupUpdateListener = function(updateURLPath, receiveMessage, handleOldBrowsers){
+  var listen = function(url, receiveMessage, maxFailures, handleOldBrowsers){
     // Recieve messages and do stuff with them
     if ( window.EventSource) {
-      var source = new EventSource(updateURLPath);
-      source.addEventListener('message', function(event) {
+      var source = new EventSource(url);
+
+      var recieveMessage = function(event) {
         updateFailureCount = 0;
         var data = JSON.parse(event.data);
         if ( data ) {
           receiveMessage(data)
         }
-      }, false);
+      }
+
+      source.addEventListener('message', recieveMessage, false);
       // Don't bother harassing server continually if we lost the connection
       source.addEventListener('error', function(event) {
         if (event.eventPhase == EventSource.CLOSED) {
           updateFailureCount += 1;
           if ( updateFailureCount >= MAX_UPDATE_FAILURES ) {
-            $disconnectedModal.modal('show');
             source.close();
+            maxFailures(updateFailureCount);
           }
         }
       }, false);
+
+      return {
+        pause: function(){
+          source.removeEventListener('message', recieveMessage, false)
+        }
+      }
+
     } else {
-      handleOldBrowsers('This browser does not support HTML5 server sent events. Please use Chrome, Firefox, Safari or IE11 instead.')
+      handleOldBrowsers('This browser does not support HTML5 server sent events. Add a shim for older browsers.')
     }
   }
 
-  return {
-    setupUpdateListener: setupUpdateListener
-  }
+  return listen
 
-});
+})

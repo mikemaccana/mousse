@@ -1,0 +1,27 @@
+{
+  "name": "pamplemousse",
+  "version": "0.2.0",
+  "author": "Mike MacCana <mike.maccana@gmail.com>",
+  "description": "Delicious SSE for Node/ExpressJS and the browser",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikemaccana/pamplemousse.git"
+  },
+  "keywords": [
+    "pamplemousse",
+    "realtime",
+    "sse",
+    "server sent events"
+  ],
+  "dependencies": {
+    "express": "^4.2.0"
+  },
+  "devDependencies": {},
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  }
+}
