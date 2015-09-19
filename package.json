@@ -2,7 +2,7 @@
   "name": "pamplemousse",
   "version": "1.0.0",
   "author": "Mike MacCana <mike.maccana@gmail.com>",
-  "description": "Delicious SSE for Node/ExpressJS and the browser",
+  "description": "Delicious SSE (server sent events) for ExpressJS and browserify",
   "scripts": {
 	"test": "mocha"
   },
