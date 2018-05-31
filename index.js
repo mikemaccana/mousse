@@ -5,12 +5,7 @@ module.exports = function(sseErrorRetry, sseKeepAliveInterval){
 
   var log = console.log.bind(console);
 
-  // Pending update responses.
-  // Key is customer. Value is an array of HTTP response objects.
-  var channelResponses = {};
-
-  // Message ID used for server sent events
-  var channelMessageIDs = {};
+  var channels = {}
 
   // Server: How long to tell browsers to wait if the server doesn't respond to our request for messages.
   var SSE_ERROR_RETRY = sseErrorRetry || 5 * 1000;
@@ -26,7 +21,8 @@ module.exports = function(sseErrorRetry, sseKeepAliveInterval){
     var responseContents = {
       id: messageID,
       retry: SSE_ERROR_RETRY,
-      data: JSON.stringify(message)
+      data: JSON.stringify(message),
+      event: 'pamplemousse'
     };
     var responseContentsFlattened = '';
     if ( comment ) {
@@ -35,19 +31,24 @@ module.exports = function(sseErrorRetry, sseKeepAliveInterval){
     for ( var key in responseContents ) {
       responseContentsFlattened += key+': '+responseContents[key]+'\n';
     }
-    res.write(responseContentsFlattened += '\n'); // Not end.
+    res.write(responseContentsFlattened += '\n');
+
+    // Required when compression is enabled
+    res.flushHeaders()
+
+    // DO NOT end() the response - we'll send more messages in future.
   };
 
   // SSE requires 'keep alive' responses every so often otherwise browsers will disconnect
   var setupKeepAlives = function(){
-    var sendKeepAlive = function(res, channelName){
-      formatAndSendMessage(res, null, 'keepalive', channelMessageIDs[channelName].messageID)
-        channelMessageIDs[channelName].messageID += 1;
+    var sendKeepAlive = function(res, channel){
+      formatAndSendMessage(res, null, 'keepalive', channels[channel].messageID)
+      channels[channel].messageID += 1;
     };
     setInterval(function(){
-      for ( var channelName in channelResponses ) {
-        channelResponses[channel].forEach(function(){
-          sendKeepAlive(res, channelName)
+      for ( var channel in channels ) {
+        channels[channel].responses.forEach(function(response){
+          sendKeepAlive(response, channel)
         })
       }
     }, SSE_KEEP_ALIVE_INTERVAL)
@@ -56,36 +57,66 @@ module.exports = function(sseErrorRetry, sseKeepAliveInterval){
   // Add a client res to a channel, so the client will get all messages sent to that channel
   var subscribeToChannel = function(channel, res){
     // Send headers, and write data, but do not end the response - this is how SSE works
+    log('subscribeToChannel')
+    // req.socket.setTimeout(Number.MAX_SAFE_INTEGER || Infinity);
+
+    // Start SSE response
     res.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive"
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive'
     });
-    if ( channelResponses.hasOwnProperty(channel) ) {
-      channelResponses[channel].push(res);
+    res.write('\n');
+
+    if ( channels[channel] ) {
+      log('adding response to channel', channel)
+      channels[channel].responses.push(res);
     } else {
-      log('Web app has registered interest in updates for channel', channel)
-      channelResponses[channel] = [res];
-      channelMessageIDs[channel] = 0;
+      log('created new channel', channel)
+      channels[channel] = {
+        // Pending update responses.
+        responses: [res],
+        messageID: 0
+      }
     }
   };
 
   // Send message to each subscribed client on the channel
-  var sendUpdate = function(channelName, message){
-    log('Sending update on channel', channelName);
-    if ( channelResponses[channelName] ) {
-      channelResponses[channelName].forEach(function(res) {
-        formatAndSendMessage(res, message, null, channelMessageIDs[channelName].messageID)
-        channelMessageIDs[channelName].messageID += 1;
+  var sendUpdate = function(channel, message){
+    if ( channels[channel].responses ) {
+      channels[channel].responses.forEach(function(res) {
+        formatAndSendMessage(res, message, null, channels[channel].messageID)
+        channels[channel].messageID += 1;
       });
     } else {
-      log('No waiting clients on channel', channelName)
+      log('No waiting clients on channel', channel)
     }
   };
 
+  // Return a list of all channels with at least one subscriber
+  var getActiveChannels = function(){
+    var activeChannels = [];
+    var channelNames = Object.keys(channels)
+    channelNames.forEach(function(channel){
+      if ( channels[channel].responses.length ) {
+        activeChannels.push(channel)
+      }
+    })
+    return activeChannels
+  }
+
+  var sendToActiveChannels = function(cb){
+    var activeChannels = getActiveChannels()
+    activeChannels.forEach(cb)
+  }
+
+  setupKeepAlives();
+
   return {
     subscribeToChannel: subscribeToChannel,
-    sendUpdate: sendUpdate
+    sendUpdate: sendUpdate,
+    getActiveChannels: getActiveChannels,
+    sendToActiveChannels: sendToActiveChannels
   };
 }
 
