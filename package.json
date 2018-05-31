@@ -1,6 +1,6 @@
 {
   "name": "pamplemousse",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Mike MacCana <mike.maccana@gmail.com>",
   "description": "Delicious SSE (server sent events) for ExpressJS and browserify",
   "scripts": {
@@ -22,6 +22,5 @@
   "license": "MIT",
   "engines": {
     "node": ">=0.10"
-  },
-  "private": true
+  }
 }
