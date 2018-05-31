@@ -4,23 +4,24 @@
   "author": "Mike MacCana <mike.maccana@gmail.com>",
   "description": "Delicious SSE (server sent events) for ExpressJS and browserify",
   "scripts": {
-	"test": "mocha"
+    "test": "mocha"
   },
   "repository": {
-	"type": "git",
-	"url": "https://github.com/mikemaccana/pamplemousse.git"
+    "type": "git",
+    "url": "https://github.com/mikemaccana/pamplemousse.git"
   },
   "keywords": [
-	"pamplemousse",
-	"sse",
-	"server sent events",
-	"realtime",
-	"browser"
-	],
+    "pamplemousse",
+    "sse",
+    "server sent events",
+    "realtime",
+    "browser"
+  ],
   "dependencies": {},
   "devDependencies": {},
   "license": "MIT",
   "engines": {
-	"node": ">=0.10"
-  }
+    "node": ">=0.10"
+  },
+  "private": true
 }
